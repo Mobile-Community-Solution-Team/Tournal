@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_agenda_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="18sp"
+            android:textColor="@color/colorAccentDark"
+            android:text="Agenda Title"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Time"/>
+
+        <TextView
+            style="@style/TextDefaultStyle"
+            android:id="@+id/tv_agenda_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 Juni 2020 Pukul 2:00"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Time"/>
+
+        <TextView
+            style="@style/TextDefaultStyle"
+            android:id="@+id/tv_agenda_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 Juni 2020 Pukul 3:00"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
