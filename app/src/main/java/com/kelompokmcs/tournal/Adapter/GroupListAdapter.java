@@ -13,7 +13,10 @@ import com.kelompokmcs.tournal.Listener.OnItemClickListener;
 import com.kelompokmcs.tournal.Model.Group;
 import com.kelompokmcs.tournal.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.GroupViewHolder> {
 
@@ -38,7 +41,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         Group groupItem = groupList.get(position);
 
         holder.tvGroupnName.setText(groupItem.getGroupName());
-        holder.tvDateRange.setText(groupItem.getStartDate() + " - " + groupItem.getEndDate());
+        holder.tvDateRange.setText(parseDateToddMMMMyyyy(groupItem.getStartDate()) + " - " + parseDateToddMMMMyyyy(groupItem.getEndDate()));
         holder.tvGroupLocation.setText(groupItem.getGroupLocation());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -67,4 +70,16 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
             tvGroupLocation = itemView.findViewById(R.id.tv_group_location);
         }
     }
+
+    private String parseDateToddMMMMyyyy(String dateString) {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new SimpleDateFormat("dd MMMM yyyy").format(date);
+    }
+
 }

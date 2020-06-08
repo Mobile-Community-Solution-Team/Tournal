@@ -48,8 +48,7 @@ public class AnnouncementFragment extends Fragment {
         emptyLayout = rootView.findViewById(R.id.empty_layout);
         dbTransaction = new DBTransaction(getContext());
 
-
-        announcementArrayList = dbTransaction.getAnnouncementById(getActivity().getIntent().getIntExtra("group",-1));
+        announcementArrayList = dbTransaction.getAnnouncementById(getActivity().getIntent().getIntExtra("groupId",-1));
 
         if(announcementArrayList.isEmpty()){
             emptyLayout.setVisibility(View.VISIBLE);
@@ -68,7 +67,8 @@ public class AnnouncementFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Intent i = new Intent(getActivity(), AnnouncementDetailActivity.class);
-                i.putExtra("announcement",announcementArrayList.get(position));;
+                i.putExtra("announcement",announcementArrayList.get(position));
+                i.putExtra("groupName",getActivity().getIntent().getStringExtra("groupName"));
                 startActivity(i);
             }
         });

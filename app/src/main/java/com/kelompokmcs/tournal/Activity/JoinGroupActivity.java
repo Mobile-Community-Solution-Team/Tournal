@@ -25,6 +25,7 @@ public class JoinGroupActivity extends AppCompatActivity implements InsertCodeFr
             getSupportFragmentManager().
                     beginTransaction().
                     replace(R.id.frame_layout,fragment).
+                    addToBackStack(null).
                     commit();
             return true;
         }

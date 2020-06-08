@@ -5,15 +5,63 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.AgendaFragment">
 
-    <LinearLayout
-        android:id="@+id/agenda_layout"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_agenda"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/previous_agenda_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+
+                <TextView
+                    style="@style/SmallerTextTitleStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="@string/previous_agenda" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_previous_agenda"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/next_agenda_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+
+                <TextView
+                    style="@style/SmallerTextTitleStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="@string/next_agenda" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_next_agenda"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/empty_layout"
@@ -26,14 +74,15 @@
         <ImageView
             android:layout_width="250dp"
             android:layout_height="200dp"
-            android:src="@drawable/ic_empty_illustration"/>
+            android:src="@drawable/ic_empty_agenda_illustration"/>
 
         <TextView
             style="@style/TextDefaultStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:textAlignment="center"
-            android:text="This group don't have any agenda"/>
+            android:text="@string/this_group_don_t_have_any_agenda"/>
 
     </LinearLayout>
 

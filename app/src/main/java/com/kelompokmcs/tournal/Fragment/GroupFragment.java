@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +29,8 @@ public class GroupFragment extends Fragment {
     private RecyclerView rvGroupList;
     private DBTransaction dbTransaction;
     private ArrayList<Group> groupArrayList;
-    private LinearLayout groupListLayout, emptyLayout;
+    private NestedScrollView groupListLayout;
+    private LinearLayout emptyLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +63,7 @@ public class GroupFragment extends Fragment {
         GroupListAdapter adapter = new GroupListAdapter(getContext(),groupArrayList);
         rvGroupList.setLayoutManager(new LinearLayoutManager(getContext()));
         rvGroupList.setAdapter(adapter);
+        rvGroupList.setNestedScrollingEnabled(false);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {

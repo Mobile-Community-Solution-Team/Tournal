@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
     app:cardCornerRadius="10dp"
     app:cardElevation="5dp">
 
@@ -19,14 +24,12 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_bold"
             android:textSize="18sp"
-            android:textColor="@color/colorPrimary"
-            android:text="Bangun Tenda"/>
+            android:textColor="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/tv_date_and_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="19 Juni 2020  pukul 12:00"/>
+            android:layout_height="wrap_content" />
         
         <Space
             android:layout_width="match_parent"
@@ -36,8 +39,7 @@
             style="@style/TextDefaultStyle"
             android:id="@+id/tv_announcement_desc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ini descripsi"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

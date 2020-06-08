@@ -4,6 +4,98 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.AddNewAnnouncementActivity">
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    tools:context=".Activity.AddNewAgendaActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="30dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <TextView
+            style="@style/TextDefaultStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:lineSpacingMultiplier="0.8"
+            android:text="@string/add_new_nannouncement"
+            android:textAlignment="center"
+            android:textSize="26sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayoutStyle"
+            android:hint="@string/announcement_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/TextDefaultStyle"
+                android:id="@+id/et_announcement_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayoutStyle"
+            android:hint="@string/announcement_description">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/TextDefaultStyle"
+                android:id="@+id/et_announcement_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|start"
+                android:minLines="6" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_add_announcement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            style="@style/RoundedButtonColorPrimary"
+            android:text="@string/add_new_announcement"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:background="#CC000000"
+        android:visibility="gone"
+        android:clickable="true">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_fileName="890-loading-animation.json"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

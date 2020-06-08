@@ -27,7 +27,7 @@ import com.kelompokmcs.tournal.Activity.SignInActivity;
 
 public class AccountFragment extends Fragment {
 
-    private TextView tvName, tvGivenName,tvFamilyName,tvEmail, tvId;
+    private TextView tvName, tvEmail;
     private ImageView ivPersonPhoto;
     private Button btnSignOut;
     private DBTransaction dbTransaction;
@@ -46,10 +46,7 @@ public class AccountFragment extends Fragment {
         View rootView = getView();
 
         tvName = rootView.findViewById(R.id.tv_name);
-        tvGivenName = rootView.findViewById(R.id.tv_given_name);
-        tvFamilyName = rootView.findViewById(R.id.tv_family_name);
         tvEmail = rootView.findViewById(R.id.tv_email);
-        tvId = rootView.findViewById(R.id.tv_id);
         ivPersonPhoto = rootView.findViewById(R.id.iv_person_photo);
         btnSignOut = rootView.findViewById(R.id.btn_sign_out);
         dbTransaction = new DBTransaction(getContext());
@@ -57,18 +54,12 @@ public class AccountFragment extends Fragment {
         GoogleSignInAccount signedInAccount = GoogleSignIn.getLastSignedInAccount(rootView.getContext());
 
         String personName = signedInAccount.getDisplayName();
-        String personGivenName = signedInAccount.getGivenName();
-        String personFamilyName = signedInAccount.getFamilyName();
         String personEmail = signedInAccount.getEmail();
-        String personId = signedInAccount.getId();
         Uri personPhoto = signedInAccount.getPhotoUrl();
 
         tvName.setText(personName);
-        tvGivenName.setText(personGivenName);
-        tvFamilyName.setText(personFamilyName);
         tvEmail.setText(personEmail);
-        tvId.setText(personId);
-        Glide.with(this).load(personPhoto).centerCrop().into(ivPersonPhoto);
+        showUserPhoto(personPhoto);
 
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,4 +88,12 @@ public class AccountFragment extends Fragment {
                 });
     }
 
+    private void showUserPhoto(Uri userPhoto) {
+        if(userPhoto == null){
+            Glide.with(getContext()).load(R.drawable.ic_user_avatar).centerCrop().into(ivPersonPhoto);
+        }
+        else{
+            Glide.with(getContext()).load(userPhoto).centerCrop().into(ivPersonPhoto);
+        }
+    }
 }

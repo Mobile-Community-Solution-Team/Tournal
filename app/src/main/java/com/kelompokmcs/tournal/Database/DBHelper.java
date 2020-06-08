@@ -13,6 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static String TABLE_GROUP = "grouptable";
     public static String TABLE_AGENDA = "agenda";
     public static String TABLE_ANNOUNCEMENT = "announcement";
+    public static String TABLE_SYMBOL = "symbol";
     public static String COL_GROUP_ID = "group_id";
     public static String COL_GROUP_CODE = "group_code";
     public static String COL_GROUP_NAME = "group_name";
@@ -25,9 +26,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static String COL_AGENDA_DESC = "agenda_desc";
     public static String COL_START_TIME = "start_time";
     public static String COL_END_TIME = "end_time";
-    public static String COL_LAT = "lat";
-    public static String COL_LNG = "lng";
-    public static String COL_ALT = "alt";
+    public static String COL_START_LAT = "start_lat";
+    public static String COL_START_LNG = "start_lng";
+    public static String COL_START_ALT = "start_alt";
+    public static String COL_END_LAT = "end_lat";
+    public static String COL_END_LNG = "end_lng";
+    public static String COL_END_ALT = "end_alt";
     public static String COL_DATE_AND_TIME = "date_and_time";
     public static String COL_ANNOUNCEMENT_ID = "announcement_id";
     public static String COL_ANNOUNCEMENT_TITLE = "announcement_title";
@@ -35,7 +39,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public static String COL_USER_NAME = "user_name";
     public static String COL_USER_EMAIL = "user_email";
     public static String COL_USER_PHOTO = "user_photo";
-
+    public static String COL_ID = "id";
+    public static String COL_LAT = "lat";
+    public static String COL_LNG = "lng";
+    public static String COL_ALT = "alt";
+    public static String COL_SYMBOL_ID = "symbol_id";
 
     public DBHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);
@@ -57,12 +65,15 @@ public class DBHelper extends SQLiteOpenHelper {
                     COL_GROUP_ID + " INTEGER, " +
                     COL_AGENDA_TITLE + " TEXT, " +
                     COL_AGENDA_DESC + " TEXT, " +
-                    COL_LAT + " REAL, " +
-                    COL_LNG + " REAL, " +
-                    COL_ALT + " REAL, " +
+                    COL_START_LAT + " REAL, " +
+                    COL_START_LNG + " REAL, " +
+                    COL_START_ALT + " REAL, " +
+                    COL_END_LAT + " REAL, " +
+                    COL_END_LNG + " REAL, " +
+                    COL_END_ALT + " REAL, " +
                     COL_START_TIME + " DATETIME, " +
                     COL_END_TIME + " DATETIME, " +
-                    "FOREIGN KEY (" + COL_GROUP_ID + ") REFERENCES " + TABLE_AGENDA + "(" + COL_GROUP_ID + "));");
+                    "FOREIGN KEY (" + COL_GROUP_ID + ") REFERENCES " + TABLE_GROUP + "(" + COL_GROUP_ID + "));");
 
         sqLiteDatabase.execSQL("CREATE TABLE "+ TABLE_ANNOUNCEMENT + " ( "+
                 COL_ANNOUNCEMENT_ID + " INTEGER PRIMARY KEY, "+
@@ -73,7 +84,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 COL_USER_NAME + " TEXT, " +
                 COL_USER_EMAIL + " TEXT, " +
                 COL_USER_PHOTO + " TEXT, " +
-                "FOREIGN KEY (" + COL_GROUP_ID + ") REFERENCES " + TABLE_AGENDA + "(" + COL_GROUP_ID + "));");
+                "FOREIGN KEY (" + COL_GROUP_ID + ") REFERENCES " + TABLE_GROUP + "(" + COL_GROUP_ID + "));");
+
+        sqLiteDatabase.execSQL("CREATE TABLE "+ TABLE_SYMBOL + " ( "+
+                COL_ID + " INTEGER PRIMARY KEY, "+
+                COL_GROUP_ID + " INTEGER, " +
+                COL_LAT + " REAL, " +
+                COL_LNG + " REAL, " +
+                COL_ALT + " REAL, " +
+                COL_SYMBOL_ID + " INTEGER, "+
+                "FOREIGN KEY (" + COL_GROUP_ID + ") REFERENCES " + TABLE_GROUP + "(" + COL_GROUP_ID + "));");
 
     }
 
@@ -82,6 +102,7 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+TABLE_ANNOUNCEMENT);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+TABLE_AGENDA);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+TABLE_GROUP);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+TABLE_SYMBOL);
         onCreate(sqLiteDatabase);
     }
 }

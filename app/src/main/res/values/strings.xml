@@ -1,6 +1,49 @@
 <resources>
     <string name="app_name">Tournal</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="access_token">pk.eyJ1IjoiZGV2ZWxvcGVyY2hhbjEiLCJhIjoiY2thamQ2M3NrMDBpMzJwbjFzM3o2M3pxdiJ9.xEST1Zd4hhBghaAIX3ywKw</string>
+    <string name="share_text">Share</string>
+    <string name="add_new_agenda_text">Add New Agenda</string>
+    <string name="agenda_title_text">Agenda Title</string>
+    <string name="start_date_text">Start Date</string>
+    <string name="start_time_text">Start Time</string>
+    <string name="end_date_text">End Date</string>
+    <string name="end_time_text">End Time</string>
+    <string name="location_text">Location</string>
+    <string name="add_this_agenda">Add This Agenda</string>
+    <string name="add_new_nannouncement">Add New\nAnnouncement</string>
+    <string name="announcement_title">Announcement Title</string>
+    <string name="announcement_description">Announcement Description</string>
+    <string name="add_new_announcement">Add new announcement</string>
+    <string name="posted_by">Posted By:</string>
+    <string name="create_new_group">Create New Group</string>
+    <string name="fill_all_fields_and_create_your_new_group">Fill all fields and create your new group</string>
+    <string name="latest_announcement">Latest Announcement</string>
+    <string name="add_new_nagenda">Add New\nAgenda</string>
+    <string name="no_any_announcement">No Any Announcement</string>
+    <string name="next_agenda">Next Agenda</string>
+    <string name="see_all">See All</string>
+    <string name="select_location_by_tap_the_map_or_search_by_tap_the_floating_action_button">Select location by tap the map or search by tap the Floating Action Button</string>
+    <string name="share_this_code_and_npassword">Share this code and\npassword</string>
+    <string name="group_code">Group Code</string>
+    <string name="group_password">Group Password</string>
+    <string name="welcome_to_tournal">Welcome To Tournal</string>
+    <string name="find_the_group_and_follow_all_group_activities">Find The Group And Follow All Group Activities</string>
+    <string name="let_s_join_now_using_google_account">Let\'s join now using Google Account</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="previous_agenda">Previous Agenda</string>
+    <string name="this_group_don_t_have_any_agenda">This group don\'t have any agenda</string>
+    <string name="your_group">Your Groups</string>
+    <string name="welcome_back">Welcome Back,</string>
+    <string name="let_s_join_or_ncreate_new_group">Let’s join or\nCreate new group</string>
+    <string name="join_a_group">Join a Group</string>
+    <string name="insert_unique_code_from_your_group">Insert unique code from your group</string>
+    <string name="next">Next</string>
+    <string name="yey_the_code_is_valid_next_step_is_enter_the_password">Yey! The code is valid. Next step is enter the password</string>
+    <string name="group_name">Group Name</string>
+    <string name="let_s_go">Let\'s Go</string>
+    <string name="no_any_agenda">No Any Agenda</string>
+    <string name="location">Location</string>
 </resources>

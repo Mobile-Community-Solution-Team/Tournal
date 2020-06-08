@@ -10,17 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.AddNewAnnouncementActivity"></activity>
+        <activity android:name=".Activity.ShareActivity"></activity>
         <activity android:name=".Activity.AddNewAgendaActivity" />
+        <activity android:name=".Activity.AgendaDetailActivity" />
+        <activity android:name=".Activity.AddNewAnnouncementActivity" />
+        <activity android:name=".Activity.SelectLocationActivity" />
         <activity android:name=".Activity.AnnouncementDetailActivity" />
-        <activity android:name=".Activity.AgendaAndAnnouncementActivity">
-        </activity>
+        <activity android:name=".Activity.AgendaAndAnnouncementActivity" />
         <activity android:name=".Activity.CreateGroupActivity" />
-        <activity android:name=".Activity.GroupActivity" >
-        </activity>
+        <activity android:name=".Activity.GroupActivity" />
         <activity android:name=".Activity.JoinGroupActivity" />
         <activity android:name=".Activity.SignInActivity" />
-        <activity android:name=".Activity.MainActivity" >
+        <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,8 +32,23 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-    </application>
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_group" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <service
+            android:name=".Service.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

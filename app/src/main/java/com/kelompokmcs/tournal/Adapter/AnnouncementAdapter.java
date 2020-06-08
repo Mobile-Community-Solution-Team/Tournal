@@ -14,7 +14,10 @@ import com.kelompokmcs.tournal.Listener.OnItemClickListener;
 import com.kelompokmcs.tournal.Model.Announcement;
 import com.kelompokmcs.tournal.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.AnnouncementViewHolder>{
     private Context context;
@@ -37,9 +40,14 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
     public void onBindViewHolder(@NonNull AnnouncementAdapter.AnnouncementViewHolder holder, final int position) {
         Announcement announcementItem = announcementList.get(position);
 
+        String announcementDesc = announcementItem.getAnnouncementDesc();
+        if(announcementDesc.length() > 100){
+            announcementDesc = announcementDesc.substring(0,100) + "...";
+        }
+
         holder.tvAnnouncementTitle.setText(announcementItem.getAnnouncementTitle());
-        holder.tvAnnouncementDesc.setText(announcementItem.getAnnouncementDesc());
-        holder.tvDateAndTime.setText(announcementItem.getDateAndTime());
+        holder.tvAnnouncementDesc.setText(announcementDesc);
+        holder.tvDateAndTime.setText(parseDateToddMMMMyyyyhhmma(announcementItem.getDateAndTime()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +72,23 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         }
     }
 
+    public void setAnnouncementList(ArrayList<Announcement> announcementList) {
+        this.announcementList = announcementList;
+    }
+
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    private String parseDateToddMMMMyyyyhhmma(String dateString) {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(dateString);
+            return new SimpleDateFormat("dd MMMM yyyy hh:mm a").format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
 

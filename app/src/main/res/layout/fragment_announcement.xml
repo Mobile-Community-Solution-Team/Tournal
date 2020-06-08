@@ -26,12 +26,13 @@
         <ImageView
             android:layout_width="250dp"
             android:layout_height="200dp"
-            android:src="@drawable/ic_empty_illustration"/>
+            android:src="@drawable/ic_empty_announcement_illustration"/>
 
         <TextView
             style="@style/TextDefaultStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:textAlignment="center"
             android:text="This group don't have any announcement"/>
     </LinearLayout>

@@ -3,8 +3,13 @@ package com.kelompokmcs.tournal.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -35,7 +41,8 @@ public class InsertCodeFragment extends Fragment implements RequestResult{
     private Button btnNext;
     private passGroupDataListener listener;
     private APIRequest apiRequest;
-    private ProgressBar progressBar;
+    private LinearLayout loadingLayout;
+    private Toolbar toolbar;
 
     public interface passGroupDataListener{
         void passGroupData(Group group);
@@ -45,6 +52,19 @@ public class InsertCodeFragment extends Fragment implements RequestResult{
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         listener = (passGroupDataListener) getActivity();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                getActivity().finish();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -61,8 +81,19 @@ public class InsertCodeFragment extends Fragment implements RequestResult{
         View rootView = getView();
         etGroupCode = rootView.findViewById(R.id.et_group_code);
         btnNext = rootView.findViewById(R.id.btn_next);
-        progressBar = rootView.findViewById(R.id.progress_bar);
+        loadingLayout = rootView.findViewById(R.id.loading_layout);
+        toolbar = rootView.findViewById(R.id.toolbar);
         apiRequest = new APIRequest(this);
+
+        toolbar.setTitle("");
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,8 +108,7 @@ public class InsertCodeFragment extends Fragment implements RequestResult{
                 }
 
                 VolleySingleton.getInstance(getContext()).addToRequestQueue(req);
-                progressBar.setVisibility(View.VISIBLE);
-
+                loadingLayout.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -99,7 +129,7 @@ public class InsertCodeFragment extends Fragment implements RequestResult{
                 else{
                     Toast.makeText(getContext(), "Wrong group id", Toast.LENGTH_SHORT).show();
                 }
-                progressBar.setVisibility(View.GONE);
+                loadingLayout.setVisibility(View.GONE);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -111,7 +141,7 @@ public class InsertCodeFragment extends Fragment implements RequestResult{
         if(requestType.equals("verifyGroupCode")){
             Toast.makeText(getContext(), "Something Error", Toast.LENGTH_SHORT).show();
             Log.e("text",error.toString());
-            progressBar.setVisibility(View.GONE);
+            loadingLayout.setVisibility(View.GONE);
         }
     }
 }

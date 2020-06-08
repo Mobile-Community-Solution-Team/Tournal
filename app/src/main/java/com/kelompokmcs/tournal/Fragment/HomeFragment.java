@@ -1,6 +1,7 @@
 package com.kelompokmcs.tournal.Fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -48,7 +49,8 @@ public class HomeFragment extends Fragment {
         GoogleSignInAccount user = GoogleSignIn.getLastSignedInAccount(getContext());
 
         tvUserName.setText(user.getDisplayName());
-        Glide.with(getContext()).load(user.getPhotoUrl()).centerCrop().into(ivUserPhoto);
+
+        showUserPhoto(user.getPhotoUrl());
 
         cvJoinGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,5 +67,14 @@ public class HomeFragment extends Fragment {
                 startActivity(i);
             }
         });
+    }
+
+    private void showUserPhoto(Uri userPhoto) {
+        if(userPhoto == null){
+            Glide.with(getContext()).load(R.drawable.ic_user_avatar).centerCrop().into(ivUserPhoto);
+        }
+        else{
+            Glide.with(getContext()).load(userPhoto).centerCrop().into(ivUserPhoto);
+        }
     }
 }

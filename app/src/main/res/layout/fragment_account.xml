@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context=".Fragment.AccountFragment">
 
     <LinearLayout
@@ -10,41 +11,42 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_person_photo"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/ic_user_avatar"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
             <TextView
+                style="@style/TextDefaultStyle"
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/tv_family_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/tv_given_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_bold"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_email"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/tv_id"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <ImageView
-                android:id="@+id/iv_person_photo"
-                android:layout_width="200dp"
-                android:layout_height="200dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
 
-            <Button
-                android:id="@+id/btn_sign_out"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sign Out"/>
+        <Button
+            style="@style/RoundedButtonColorPrimary"
+            android:id="@+id/btn_sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:text="@string/sign_out"/>
 
     </LinearLayout>
 </FrameLayout>

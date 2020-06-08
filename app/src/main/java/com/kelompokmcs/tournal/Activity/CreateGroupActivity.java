@@ -1,6 +1,8 @@
 package com.kelompokmcs.tournal.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -9,12 +11,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.kelompokmcs.tournal.API.APIRequest;
 import com.kelompokmcs.tournal.Database.DBTransaction;
 import com.kelompokmcs.tournal.Listener.RequestResult;
@@ -36,6 +43,8 @@ public class CreateGroupActivity extends AppCompatActivity implements RequestRes
     private int startYear, startMonth, startDay, endYear, endMonth, endDay;
     private DBTransaction dbTransaction;
     private APIRequest apiRequest;
+    private Toolbar toolbar;
+    private LinearLayout loadingLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,8 @@ public class CreateGroupActivity extends AppCompatActivity implements RequestRes
         etGroupPassword = findViewById(R.id.et_group_pass);
         etConfirmGroupPassword = findViewById(R.id.et_confirm_group_pass);
         btnCreateGroup = findViewById(R.id.btn_create_group);
+        toolbar = findViewById(R.id.toolbar);
+        loadingLayout = findViewById(R.id.loading_layout);
         dbTransaction = new DBTransaction(this);
         apiRequest = new APIRequest(this);
 
@@ -60,16 +71,27 @@ public class CreateGroupActivity extends AppCompatActivity implements RequestRes
         endMonth = startMonth;
         endDay = startDay;
 
+        toolbar.setTitle("");
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         etStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(CreateGroupActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        etStartDate.setText(parseDateToddMMMMyyyy(i,i1,i2));
                         startYear = i;
                         startMonth = i1;
                         startDay = i2;
+                        checkStartDateAndEndDate();
+                        etStartDate.setText(parseDateToddMMMMyyyy(startYear,startMonth,startDay));
                     }
                 }, startYear,startMonth,startDay);
                 datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
@@ -83,10 +105,11 @@ public class CreateGroupActivity extends AppCompatActivity implements RequestRes
                 DatePickerDialog datePickerDialog = new DatePickerDialog(CreateGroupActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        etEndDate.setText(parseDateToddMMMMyyyy(i,i1,i2));
                         endYear = i;
                         endMonth = i1;
                         endDay = i2;
+                        checkStartDateAndEndDate();
+                        etEndDate.setText(parseDateToddMMMMyyyy(endYear,endMonth,endDay));
                     }
                 }, endYear,endMonth,endDay);
                 Calendar startDate = Calendar.getInstance();
@@ -111,15 +134,39 @@ public class CreateGroupActivity extends AppCompatActivity implements RequestRes
         });
     }
 
+    private void checkStartDateAndEndDate() {
+        try {
+            Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startYear+"-"+startMonth+"-"+startDay);
+            Date endDate =  new SimpleDateFormat("yyyy-MM-dd").parse(endYear+"-"+endMonth+"-"+endDay);
+
+            if(startDate.after(endDate)){
+                //swipe startDate dan endDate jika startDate setelah endDate
+                int a = startYear;
+                int b = startMonth;
+                int c = startDay;
+                startYear = endYear;
+                startMonth = endMonth;
+                startDay = endDay;
+                endYear = a;
+                endMonth = b;
+                endDay = c;
+                etStartDate.setText(parseDateToddMMMMyyyy(startYear,startMonth,startDay));
+                etEndDate.setText(parseDateToddMMMMyyyy(endYear,endMonth,endDay));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     private String parseDateToddMMMMyyyy(int i, int i1, int i2) {
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(i+"-"+i1+"-"+i2);
+            return new SimpleDateFormat("dd MMMM yyyy").format(date);
         } catch (ParseException e) {
             e.printStackTrace();
+            return "";
         }
-
-        return new SimpleDateFormat("dd MMMM yyyy").format(date);
     }
 
     private void validateCreateGroupForm(String groupName, String groupLocation, String startDate, String endDate, String groupPassword, String confirmGroupPassword) {
@@ -155,6 +202,7 @@ public class CreateGroupActivity extends AppCompatActivity implements RequestRes
             etConfirmGroupPassword.setError("Confirmation password must be the same with password");
         }
         else{
+            loadingLayout.setVisibility(View.VISIBLE);
             try {
                 GoogleSignInAccount user = GoogleSignIn.getLastSignedInAccount(CreateGroupActivity.this);
                 JsonObjectRequest request = apiRequest.createNewGroupRequest(user.getId(),groupName,groupLocation, startDate, endDate, groupPassword);
@@ -192,6 +240,8 @@ public class CreateGroupActivity extends AppCompatActivity implements RequestRes
 
                 Group newGroup = new Group(groupId,groupCode,groupName,groupLocation,startDate,endDate,groupPass);
 
+                subscribeToTopic(groupId);
+
                 dbTransaction.addNewGroup(newGroup);
 
                 Toast.makeText(CreateGroupActivity.this,"Successfull Create a Group",Toast.LENGTH_SHORT).show();
@@ -205,12 +255,26 @@ public class CreateGroupActivity extends AppCompatActivity implements RequestRes
             }
         }
     }
-
     @Override
     public void notifyError(String requestType, VolleyError error) {
         if(requestType.equals("createNewGroup")){
-            Toast.makeText(CreateGroupActivity.this, "Something Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreateGroupActivity.this, "Failed to create new group", Toast.LENGTH_SHORT).show();
             Log.e("text",error.toString());
         }
+        loadingLayout.setVisibility(View.GONE);
+    }
+
+    private void subscribeToTopic(int groupId) {
+        //notification for 1 group
+        FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(groupId))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Subscribed";
+                        if (!task.isSuccessful()) {
+                            msg = "Subscribe Failed";
+                        }
+                        Log.d("Notification", msg);
+                    }});
     }
 }

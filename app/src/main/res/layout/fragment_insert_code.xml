@@ -7,6 +7,12 @@
     android:background="@color/colorPrimary"
     tools:context=".Fragment.InsertCodeFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"/>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="350dp"
@@ -28,7 +34,7 @@
                 android:fontFamily="@font/open_sans_bold"
                 android:textSize="28sp"
                 android:textAlignment="center"
-                android:text="Insert unique code from your group "/>
+                android:text="@string/insert_unique_code_from_your_group"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -43,20 +49,38 @@
                 android:textAlignment="center"
                 android:maxLength="5"/>
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+
             <Button
+                style="@style/RoundedButtonColorPrimary"
                 android:id="@+id/btn_next"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Next"/>
+                android:text="@string/next"/>
 
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+    <LinearLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:background="#CC000000"
+        android:visibility="gone"
+        android:elevation="5dp"
+        android:clickable="true">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_fileName="890-loading-animation.json"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true" />
+    </LinearLayout>
 </FrameLayout>
