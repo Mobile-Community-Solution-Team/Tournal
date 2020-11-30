@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.kelompokmcs.tournal.API.APIRequest;
 import com.kelompokmcs.tournal.API.VolleySingleton;
@@ -52,6 +53,7 @@ public class GroupActivity extends AppCompatActivity implements SwipeRefreshLayo
     private RecyclerView rvLatestAnnouncement, rvNextAgenda;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout loadingLayout;
+    private FloatingActionButton fabChat;
     private AgendaAdapter agendaAdapter;
     private AnnouncementAdapter announcementAdapter;
     private DBTransaction dbTransaction;
@@ -79,6 +81,7 @@ public class GroupActivity extends AppCompatActivity implements SwipeRefreshLayo
         toolbar = findViewById(R.id.toolbar);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         loadingLayout = findViewById(R.id.loading_layout);
+        fabChat = findViewById(R.id.fab_chat);
         apiRequest = new APIRequest(this);
         dbTransaction = new DBTransaction(this);
 
@@ -103,6 +106,16 @@ public class GroupActivity extends AppCompatActivity implements SwipeRefreshLayo
         loadingLayout.setVisibility(View.VISIBLE);
         //dapatkan data terbaru dari server
         updateData();
+
+        fabChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(GroupActivity.this,ChatActivity.class);
+                i.putExtra("groupId",groupId);
+                i.putExtra("groupName",groupData.getGroupName());
+                startActivity(i);
+            }
+        });
 
         tvSeeAllAnouncement.setOnClickListener(new View.OnClickListener() {
             @Override

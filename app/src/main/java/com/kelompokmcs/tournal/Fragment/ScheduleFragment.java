@@ -135,15 +135,32 @@ public class ScheduleFragment extends Fragment{
     }
 
     private void addEvenTag() {
-        for (Agenda agenda : allAgendas){
+        ArrayList<Date> dateArrayList = new ArrayList<>();
+
+        for(int i = 0; i<allAgendas.size();i++){
+            boolean duplicateDate = false;
+            Date date = null;
             try {
-                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(agenda.getStartTime());
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                collapsibleCalendar.addEventTag(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+                date = new SimpleDateFormat("yyyy-MM-dd").parse(allAgendas.get(i).getStartTime());
+                for(int j = 0; j<dateArrayList.size();j++){
+                    if(date.equals(dateArrayList.get(j))){
+                        duplicateDate = true;
+                        break;
+                    }
+                }
+                if(!duplicateDate){
+                    dateArrayList.add(date);
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
+        }
+
+        for (Date date : dateArrayList){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            collapsibleCalendar.addEventTag(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
         }
     }
 

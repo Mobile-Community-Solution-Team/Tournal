@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.LinearLayout;
 
 import com.kelompokmcs.tournal.Activity.AgendaDetailActivity;
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.view.View.GONE;
 
@@ -36,6 +38,10 @@ public class AgendaFragment extends Fragment {
     private DBTransaction dbTransaction;
     private ArrayList<Agenda> nextAgendaArrayList, previousAgendaArraylist;
     private LinearLayout previousAgendaLayout, nextAgendaLayout, emptyLayout;
+    private AgendaAdapter previousAgendaAdapter, nextAgendaAdapter;
+    public boolean showPreviousAgenda = true;
+    public boolean showNextAgenda = true;
+    public boolean previousNextAgenda = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,11 +107,11 @@ public class AgendaFragment extends Fragment {
     }
 
     private void setupPreviousAgendaRecyclerView() {
-        AgendaAdapter adapter = new AgendaAdapter(getContext(),previousAgendaArraylist);
+        previousAgendaAdapter = new AgendaAdapter(getContext(),previousAgendaArraylist);
         rvPreviousAgenda.setNestedScrollingEnabled(false);
         rvPreviousAgenda.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvPreviousAgenda.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        rvPreviousAgenda.setAdapter(previousAgendaAdapter);
+        previousAgendaAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent i = new Intent(getActivity(), AgendaDetailActivity.class);
@@ -116,11 +122,11 @@ public class AgendaFragment extends Fragment {
     }
 
     private void setupNextAgendaRecyclerView() {
-        AgendaAdapter adapter = new AgendaAdapter(getContext(),nextAgendaArrayList);
+        nextAgendaAdapter = new AgendaAdapter(getContext(),nextAgendaArrayList);
         rvNextAgenda.setNestedScrollingEnabled(false);
         rvNextAgenda.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvNextAgenda.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        rvNextAgenda.setAdapter(nextAgendaAdapter);
+        nextAgendaAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent i = new Intent(getActivity(), AgendaDetailActivity.class);
@@ -130,4 +136,99 @@ public class AgendaFragment extends Fragment {
         });
     }
 
+    public Filter getFilter() {
+        return filter;
+    }
+
+    private Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Agenda> filteredAgendaList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredAgendaList.addAll(previousAgendaArraylist);
+                filteredAgendaList.addAll(nextAgendaArrayList);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Agenda item : previousAgendaArraylist) {
+                    if (item.getAgendaTitle().toLowerCase().contains(filterPattern)) {
+                        filteredAgendaList.add(item);
+                    }
+                }
+                for (Agenda item : nextAgendaArrayList) {
+                    if (item.getAgendaTitle().toLowerCase().contains(filterPattern)) {
+                        filteredAgendaList.add(item);
+                    }
+                }
+
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredAgendaList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            ArrayList<Agenda> filteredList = new ArrayList<>((List) filterResults.values);
+            ArrayList<Agenda> filteredPreviousAgendaList = new ArrayList<>();
+            ArrayList<Agenda> filteredNextAgendaList = new ArrayList<>();
+
+            for (Agenda agenda : filteredList) {
+                try {
+                    Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(agenda.getStartTime());
+                    if(Calendar.getInstance().getTime().after(date)){
+                        filteredPreviousAgendaList.add(agenda);
+                    }
+                    else{
+                        filteredNextAgendaList.add(agenda);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(filteredPreviousAgendaList.isEmpty()){
+                previousAgendaLayout.setVisibility(GONE);
+            }
+            else{
+                previousAgendaLayout.setVisibility(View.VISIBLE);
+                previousAgendaAdapter.setAgendaList(filteredPreviousAgendaList);
+                previousAgendaAdapter.notifyDataSetChanged();
+            }
+
+            if(filteredNextAgendaList.isEmpty()){
+                nextAgendaLayout.setVisibility(GONE);
+            }
+            else{
+                nextAgendaLayout.setVisibility(View.VISIBLE);
+                nextAgendaAdapter.setAgendaList(filteredNextAgendaList);
+                nextAgendaAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+    public void changeFilterValue(boolean showPreviousAgenda, boolean showNextAgenda){
+        this.showPreviousAgenda = showPreviousAgenda;
+        this.showNextAgenda = showNextAgenda;
+
+        if(showNextAgenda){
+           nextAgendaLayout.setVisibility(View.VISIBLE);
+        }
+        else{
+            nextAgendaLayout.setVisibility(GONE);
+        }
+
+        if(showPreviousAgenda){
+            previousAgendaLayout.setVisibility(View.VISIBLE);
+        }
+        else{
+            previousAgendaLayout.setVisibility(GONE);
+        }
+    }
+
+    public void changeSortValue(boolean previousNextAgenda){
+        this.previousNextAgenda = previousNextAgenda;
+    }
 }

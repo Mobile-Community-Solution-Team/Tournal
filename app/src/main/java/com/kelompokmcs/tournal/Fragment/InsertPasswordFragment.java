@@ -136,7 +136,8 @@ public class InsertPasswordFragment extends Fragment implements RequestResult {
                     VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
                 }
                 else if(status.equals("Already Join This Group")){
-                    Toast.makeText(getContext(), "You already join the group", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You already join the group", Toast.LENGTH_LONG).show();
+                    loadingLayout.setVisibility(View.GONE);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

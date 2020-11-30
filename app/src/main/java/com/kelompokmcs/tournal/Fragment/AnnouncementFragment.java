@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.kelompokmcs.tournal.Activity.AnnouncementDetailActivity;
 import com.kelompokmcs.tournal.Adapter.AnnouncementAdapter;
@@ -21,7 +23,11 @@ import com.kelompokmcs.tournal.Listener.OnItemClickListener;
 import com.kelompokmcs.tournal.Model.Announcement;
 import com.kelompokmcs.tournal.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 public class AnnouncementFragment extends Fragment {
@@ -30,6 +36,9 @@ public class AnnouncementFragment extends Fragment {
     private DBTransaction dbTransaction;
     private ArrayList<Announcement> announcementArrayList;
     private LinearLayout announcementLayout, emptyLayout;
+    private AnnouncementAdapter adapter;
+    public boolean sortFromNewest = true;
+    public Date startDate, endDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +69,7 @@ public class AnnouncementFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        AnnouncementAdapter adapter = new AnnouncementAdapter(getContext(),announcementArrayList);
+        adapter = new AnnouncementAdapter(getContext(),announcementArrayList);
         rvAnnouncement.setLayoutManager(new LinearLayoutManager(getContext()));
         rvAnnouncement.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -72,5 +81,81 @@ public class AnnouncementFragment extends Fragment {
                 startActivity(i);
             }
         });
+    }
+
+    public Filter getFilter() {
+        return filter;
+    }
+
+    private Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Announcement> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(announcementArrayList);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Announcement item : announcementArrayList) {
+                    if (item.getAnnouncementTitle().toLowerCase().contains(filterPattern) || item.getAnnouncementDesc().toLowerCase().contains(constraint)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            ArrayList<Announcement> filteredLits = new ArrayList<>((List) filterResults.values);
+            adapter.setAnnouncementList(filteredLits);
+            adapter.notifyDataSetChanged();
+        }
+    };
+
+    public void changeSortValue(boolean sortFromNewest){
+        this.sortFromNewest = sortFromNewest;
+
+        if(sortFromNewest){
+            for(int i=0;i<announcementArrayList.size()-1;i++){
+                for(int j=i+1;j<announcementArrayList.size();j++){
+                    try {
+                        Date date1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(announcementArrayList.get(i).getDateAndTime());
+                        Date date2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(announcementArrayList.get(j).getDateAndTime());
+                        if(date1.before(date2)){
+                            Announcement announcement = announcementArrayList.get(i);
+                            announcementArrayList.set(i,announcementArrayList.get(j));
+                            announcementArrayList.set(j,announcement);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        else{
+            for(int i=0;i<announcementArrayList.size()-1;i++){
+                for(int j=i+1;j<announcementArrayList.size();j++){
+                    try {
+                        Date date1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(announcementArrayList.get(i).getDateAndTime());
+                        Date date2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(announcementArrayList.get(j).getDateAndTime());
+                        if(date1.after(date2)){
+                            Announcement announcement = announcementArrayList.get(i);
+                            announcementArrayList.set(i,announcementArrayList.get(j));
+                            announcementArrayList.set(j,announcement);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        adapter.setAnnouncementList(announcementArrayList);
+        adapter.notifyDataSetChanged();
     }
 }

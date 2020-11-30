@@ -4,4 +4,24 @@
     <color name="colorPrimaryDark">#00ACC1</color>
     <color name="colorAccent">#FFA726</color>
     <color name="colorAccentLight">#FDD835</color>
+    <!-- dots inactive colors -->
+    <color name="dot_dark_screen1">#F1EEEE</color>
+    <color name="dot_dark_screen2">#F1EEEE</color>
+    <color name="dot_dark_screen3">#F1EEEE</color>
+    <!-- dots active colors -->
+    <color name="dot_light_screen1">@color/colorPrimary</color>
+    <color name="dot_light_screen2">@color/colorPrimary</color>
+    <color name="dot_light_screen3">@color/colorPrimary</color>
+
+    <array name="array_dot_active">
+        <item>@color/dot_light_screen1</item>
+        <item>@color/dot_light_screen2</item>
+        <item>@color/dot_light_screen3</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_dark_screen1</item>
+        <item>@color/dot_dark_screen2</item>
+        <item>@color/dot_dark_screen3</item>
+    </array>
 </resources>

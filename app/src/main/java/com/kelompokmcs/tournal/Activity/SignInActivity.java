@@ -111,7 +111,7 @@ public class SignInActivity extends AppCompatActivity implements RequestResult {
             try {
                 //jika belum pernah memakai aplikasi Tournal, maka tidak perlu mengambil data user dari server
                 if(response.getString("response").equals("Success add new user data")){
-                    Intent i = new Intent(SignInActivity.this,MainActivity.class);
+                    Intent i = new Intent(SignInActivity.this,IntroActivity.class);
                     startActivity(i);
                     finish();
                 }
@@ -199,7 +199,7 @@ public class SignInActivity extends AppCompatActivity implements RequestResult {
                 }
                 dbTransaction.addAgendaDatas(agendaArrayList);
 
-                Intent i = new Intent(SignInActivity.this,MainActivity.class);
+                Intent i = new Intent(SignInActivity.this,IntroActivity.class);
                 startActivity(i);
                 finish();
             } catch (JSONException e) {
